@@ -69,6 +69,7 @@ class ActivityDetail extends Component {
     })
 
     if(userIsLoggedIn){
+      console.log('fetching stream data');
       fetch(thisActivityStreamApiUrl, {
         method: 'get',
         headers: {

@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 import {NavLink} from 'react-router-dom';
 import Login from '../views/login';
 import {getCookie, deleteCookie} from '../components/cookieHelper'
-
-let userIsLoggedIn = getCookie('access_token')
+import {auth} from '../components/firebase'
+import * as firebase from 'firebase';
 
 class Nav extends Component {
 
@@ -16,7 +16,7 @@ class Nav extends Component {
 
   componentWillMount() {
 
-    if(userIsLoggedIn) {
+    if(auth.currentUser.uid) {
       let userAccessToken = getCookie('access_token')
 
       fetch('https://www.strava.com/api/v3/athlete', {
@@ -44,7 +44,7 @@ class Nav extends Component {
         <div className="c-navigation">
           <ul className="c-navigation__nav">
             <NavLink activeClassName="active" exact to="/">
-              <h4 className="c-navigation__logo">🍌 banana</h4>
+              <h4 className="c-navigation__logo"><span role="img">🍌</span> banana</h4>
             </NavLink>
 
             {/* <li className="c-navigation__nav-item">
@@ -82,6 +82,11 @@ class NavigationProfile extends Component {
   logout = () => {
     deleteCookie('access_token');
     window.location.assign('/banana');
+    firebase.auth().signOut().then(function() {
+      // Sign-out successful.
+    }).catch(function(error) {
+      // An error happened.
+    });
   }
 
   showDropdown = () => {

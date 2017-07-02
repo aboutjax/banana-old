@@ -7,6 +7,8 @@ defaults.global.elements.point.radius = 0;
 defaults.global.elements.point.backgroundColor = 'rgba(0,0,0,0)';
 defaults.global.elements.line.tension = 0.5;
 defaults.global.elements.line.borderWidth = 0;
+defaults.global.elements.line.borderColor = 'rgba(0,0,0,0)';
+
 defaults.global.defaultFontFamily = "'-apple-system','Helvetica Neue', 'Helvetica', 'Arial', sans-serif";
 
 const globalTicksFontSize = 9

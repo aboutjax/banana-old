@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import './index.css';
 import {Route} from 'react-router-dom';
-import {getCookie} from './components/cookieHelper'
+import * as firebase from 'firebase';
+import {auth,authData} from './components/firebase'
 
 // Views
 import Activities from './views/activities';
@@ -11,18 +12,45 @@ import ActivityDetail from './views/activityDetail';
 import Home from './views/home';
 import Footer from './components/footer';
 
-let userIsLoggedIn;
-let access_token = getCookie('access_token');
-if(access_token) {
-  userIsLoggedIn = true
-} else {
-  userIsLoggedIn = false
-}
-
 class App extends Component {
 
+  constructor() {
+    super();
+    this.state = {
+      loggedIn: false
+    }
+  }
+
+  componentWillMount() {
+
+
+    firebase.auth().onAuthStateChanged( (user) => {
+
+      if(user) {
+
+        // Set state to loggedIn
+        this.setState({loggedIn: true})
+
+        // Retrieve user access token from Firebase
+        firebase.database().ref('/users/' + user.uid).once('value').then((snapshot) =>{
+          let value = snapshot.val()
+
+          // Set accesstoken as an app state
+          this.setState(value)
+        })
+
+      } else {
+        // do nothing
+      }
+    })
+  }
+
+  componentDidMount() {
+    console.log(authData);
+  }
+
   render(){
-    if(userIsLoggedIn) {
+    if(this.state.loggedIn) {
       return(
 
           <div className="App o-wrapper o-app">
